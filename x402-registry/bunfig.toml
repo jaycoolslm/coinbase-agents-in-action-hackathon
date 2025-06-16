@@ -1,0 +1,17 @@
+[test]
+# Configure longer timeout for integration tests (60 seconds)
+timeout = 60000
+
+# Run integration tests serially to avoid conflicts
+serial = true
+
+# Preload environment variables
+preload = ["dotenv/config"]
+
+# Only run integration tests when specifically requested
+# This allows us to run unit tests normally and integration tests separately
+[test.integration]
+# Integration tests should be run serially due to potential shared state
+# and external dependencies like Hedera testnet
+serial = true
+timeout = 60000 

@@ -1,0 +1,28 @@
+{
+  "price_usdc": 0.001,
+  "version": 1,
+  "request_schema": {
+    "type": "object",
+    "properties": {
+      "a": {
+        "type": "number",
+        "description": "First number to add"
+      },
+      "b": {
+        "type": "number",
+        "description": "Second number to add"
+      }
+    },
+    "required": ["a", "b"]
+  },
+  "response_schema": {
+    "type": "object",
+    "properties": {
+      "result": {
+        "type": "number",
+        "description": "The sum of the two input numbers"
+      }
+    },
+    "required": ["result"]
+  }
+}

@@ -1,0 +1,8 @@
+{
+  "id": "local-math-addition-api",
+  "url": "http://localhost:4021/add",
+  "method": "POST",
+  "description": "Simple mathematical addition service that adds two numbers together",
+  "pointer_topic_id": "0.0.000003",
+  "initial_price_usdc": 0.001
+}

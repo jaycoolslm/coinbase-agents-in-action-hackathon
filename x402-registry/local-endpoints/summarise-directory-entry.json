@@ -1,0 +1,8 @@
+{
+  "id": "local-text-summarizer-api",
+  "url": "http://localhost:4021/summarise",
+  "method": "POST",
+  "description": "AI-powered text summarization service using AWS Bedrock that condenses text into concise summaries",
+  "pointer_topic_id": "0.0.000002",
+  "initial_price_usdc": 0.001
+}

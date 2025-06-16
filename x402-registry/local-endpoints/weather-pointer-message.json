@@ -1,0 +1,19 @@
+{
+  "price_usdc": 0.001,
+  "version": 1,
+  "request_schema": {
+    "type": "object",
+    "properties": {},
+    "description": "No request body required for weather endpoint"
+  },
+  "response_schema": {
+    "type": "object",
+    "properties": {
+      "weather": {
+        "type": "string",
+        "description": "Current weather status"
+      }
+    },
+    "required": ["weather"]
+  }
+}

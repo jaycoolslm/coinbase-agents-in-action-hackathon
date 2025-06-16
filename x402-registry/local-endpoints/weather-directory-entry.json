@@ -1,0 +1,8 @@
+{
+  "id": "local-weather-api",
+  "url": "http://localhost:4021/weather",
+  "method": "GET",
+  "description": "Simple weather service that returns current weather status",
+  "pointer_topic_id": "0.0.000001",
+  "initial_price_usdc": 0.001
+}
