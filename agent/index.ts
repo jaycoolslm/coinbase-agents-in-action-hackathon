@@ -17,6 +17,7 @@ import { ChatOpenAI } from "@langchain/openai";
 import * as dotenv from "dotenv";
 import * as fs from "fs";
 import * as readline from "readline";
+import { registryQueryActionProvider } from "./providers/registryQueryActionProvider";
 
 dotenv.config();
 
@@ -102,10 +103,7 @@ async function initializeAgent() {
     const agentkit = await AgentKit.from({
       walletProvider,
       actionProviders: [
-        wethActionProvider(),
         walletActionProvider(),
-        erc20ActionProvider(),
-        erc721ActionProvider(),
         cdpApiActionProvider({
           apiKeyId: process.env.CDP_API_KEY_ID,
           apiKeySecret: process.env.CDP_API_KEY_SECRET,
@@ -114,6 +112,7 @@ async function initializeAgent() {
           apiKeyId: process.env.CDP_API_KEY_ID,
           apiKeySecret: process.env.CDP_API_KEY_SECRET,
         }),
+        registryQueryActionProvider(),
         x402ActionProvider(),
       ],
     });
@@ -141,6 +140,8 @@ async function initializeAgent() {
         encourage them to implement it themselves using the CDP SDK + Agentkit, recommend they go to 
         docs.cdp.coinbase.com for more information. Be concise and helpful with your responses. Refrain from 
         restating your tools' descriptions unless it is explicitly requested.
+        
+        You have a tool pdf_table_to_csv_poc that uploads the local file ./table.pdf.
         `,
     });
 

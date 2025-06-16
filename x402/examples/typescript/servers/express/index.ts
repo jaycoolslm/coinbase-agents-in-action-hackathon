@@ -1,7 +1,6 @@
 import { config } from "dotenv";
 import express from "express";
 import { paymentMiddleware, Resource } from "x402-express";
-import multer from "multer";
 import { BedrockRuntimeClient, ConverseCommand } from "@aws-sdk/client-bedrock-runtime";
 config();
 
@@ -21,14 +20,25 @@ if (!facilitatorUrl || !payTo) {
 
 const app = express();
 
+// Add JSON parsing middleware
+app.use(express.json());
+
 app.use(
   paymentMiddleware(
     payTo,
     {
-      "POST /pdf-table-to-csv": {
+      "GET /weather": {
+        price: "$0.001",
+        network: "base-sepolia",
+      },
+      "POST /summarise": {
         // USDC amount in dollars
         price: "$0.001",
         // network: "base" // uncomment for Base mainnet
+        network: "base-sepolia",
+      },
+      "POST /add": {
+        price: "$0.001",
         network: "base-sepolia",
       },
     },
@@ -37,44 +47,28 @@ app.use(
     },
   ),
 );
-
-// Multer setup for in-memory file handling
-const upload = multer({ storage: multer.memoryStorage() });
+app.get("/weather", (req, res) => {
+  res.send({ weather: "sunny" });
+});
 
 const bedrock = new BedrockRuntimeClient({ region: AWS_REGION });
 
-app.post("/pdf-table-to-csv", upload.single("file"), async (req, res): Promise<void> => {
+app.post("/summarise", async (req, res): Promise<void> => {
   try {
-    const file = (req as any).file as any | undefined;
-    if (!file) {
-      res.status(400).send({ error: "No file uploaded" });
+    const { text } = req.body;
+
+    if (!text || typeof text !== "string") {
+      res.status(400).send({ error: "Text field is required and must be a string" });
       return;
     }
 
-    // Call Bedrock Converse API directly with PDF bytes
+    // Call Bedrock Converse API to summarize the text
     const modelId = BEDROCK_SONNET_MODEL;
-
-    // Sanitize filename for Bedrock - only alphanumeric, whitespace, hyphens, parentheses, square brackets allowed
-    const sanitizedName =
-      (file.originalname ?? "upload.pdf")
-        .replace(/\.pdf$/i, "") // Remove .pdf extension
-        .replace(/[^a-zA-Z0-9\s\-\(\)\[\]]/g, "_") // Replace invalid chars with underscore
-        .replace(/\s{2,}/g, " ") // Replace multiple spaces with single space
-        .trim() || "document";
 
     const messages: any = [
       {
         role: "user",
-        content: [
-          { text: "Extract the first table and return CSV only." },
-          {
-            document: {
-              format: "pdf",
-              name: sanitizedName,
-              source: { bytes: file.buffer as Uint8Array },
-            },
-          },
-        ],
+        content: [{ text: `Please provide a concise summary of the following text:\n\n${text}` }],
       },
     ];
 
@@ -85,14 +79,31 @@ app.post("/pdf-table-to-csv", upload.single("file"), async (req, res): Promise<v
     });
 
     const { output } = await bedrock.send(convoCmd);
-    const csv = output?.message?.content?.[0]?.text?.trim() ?? "";
+    const summary = output?.message?.content?.[0]?.text?.trim() ?? "";
 
-    console.log(csv);
-
-    res.send({ csv });
+    res.send({ summary });
   } catch (err) {
     console.error(err);
-    res.status(500).send({ error: "Failed to process PDF" });
+    res.status(500).send({ error: "Failed to summarize text" });
+  }
+});
+
+// Simple addition endpoint
+app.post("/add", (req, res): void => {
+  try {
+    const { a, b } = req.body;
+
+    // Validate inputs
+    if (typeof a !== "number" || typeof b !== "number") {
+      res.status(400).send({ error: "Both 'a' and 'b' must be numbers" });
+      return;
+    }
+
+    const result = a + b;
+    res.send({ result });
+  } catch (err) {
+    console.error(err);
+    res.status(500).send({ error: "Failed to add numbers" });
   }
 });
 
