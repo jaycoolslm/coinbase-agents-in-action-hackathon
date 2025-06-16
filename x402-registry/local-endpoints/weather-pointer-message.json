@@ -3,8 +3,7 @@
   "version": 1,
   "request_schema": {
     "type": "object",
-    "properties": {},
-    "description": "No request body required for weather endpoint"
+    "properties": {}
   },
   "response_schema": {
     "type": "object",
@@ -13,7 +12,6 @@
         "type": "string",
         "description": "Current weather status"
       }
-    },
-    "required": ["weather"]
+    }
   }
 }

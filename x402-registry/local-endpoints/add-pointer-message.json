@@ -12,8 +12,7 @@
         "type": "number",
         "description": "Second number to add"
       }
-    },
-    "required": ["a", "b"]
+    }
   },
   "response_schema": {
     "type": "object",
@@ -22,7 +21,6 @@
         "type": "number",
         "description": "The sum of the two input numbers"
       }
-    },
-    "required": ["result"]
+    }
   }
 }

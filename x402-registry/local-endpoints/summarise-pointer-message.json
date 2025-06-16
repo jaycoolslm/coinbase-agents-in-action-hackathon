@@ -8,8 +8,7 @@
         "type": "string",
         "description": "The text to summarize"
       }
-    },
-    "required": ["text"]
+    }
   },
   "response_schema": {
     "type": "object",
@@ -18,7 +17,6 @@
         "type": "string",
         "description": "The generated summary of the input text"
       }
-    },
-    "required": ["summary"]
+    }
   }
 }
