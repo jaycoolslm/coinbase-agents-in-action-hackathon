@@ -2,4 +2,10 @@ for mvp, keeping the pointer topic schema very simple so that json object is kep
 
 assuming all fields are required
 
-future iterations could included optional fields, example req / res bodies etc
+future iterations could included optional fields, example req / res bodies etc, trust score / reputation
+
+high level overview:
+
+public (anyone can submit messages) to registry - though they have to pay a fee to submit message
+this points to their own topic which contains latest information of their endpoint
+cli tools + basic schema to help this

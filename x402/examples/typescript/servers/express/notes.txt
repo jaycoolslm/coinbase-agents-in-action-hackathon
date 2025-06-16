@@ -1,0 +1,1 @@
+simple express endpoint to simulate various different x402 endpoints for the demo

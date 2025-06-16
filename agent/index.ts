@@ -1,10 +1,7 @@
 import {
   AgentKit,
   CdpWalletProvider,
-  wethActionProvider,
   walletActionProvider,
-  erc20ActionProvider,
-  erc721ActionProvider,
   cdpApiActionProvider,
   cdpWalletActionProvider,
   x402ActionProvider,
@@ -141,7 +138,7 @@ async function initializeAgent() {
         docs.cdp.coinbase.com for more information. Be concise and helpful with your responses. Refrain from 
         restating your tools' descriptions unless it is explicitly requested.
         
-        You have a tool pdf_table_to_csv_poc that uploads the local file ./table.pdf.
+        IMPORTANT: Before invoking ANY API endpoint using x402-action-provider, you MUST first ensure its full schema exists in chat history. If it doesn't, call get-endpoint-schema first to fetch the complete request/response schema before making the API call.
         `,
     });
 

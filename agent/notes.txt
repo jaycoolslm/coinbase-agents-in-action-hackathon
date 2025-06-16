@@ -3,5 +3,4 @@ for MVP, no advanced search or filtering tools are given to Agent.
 Assuming that the registry list is small therefore agent can identify relevant endpoint
 purely by description and context
 
-currently the registry topic id is hardcoded in the x402-registry sdk / dir. it comes from
-an .env file in there
+currently the registry topic id is hardcoded local .env file which is picked up by util function
