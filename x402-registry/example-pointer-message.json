@@ -1,0 +1,30 @@
+{
+  "price_usdc": 0.05,
+  "version": 1,
+  "request_schema": {
+    "type": "object",
+    "properties": {
+      "text": {
+        "type": "string",
+        "description": "The text to summarize"
+      },
+      "max_sentences": {
+        "type": "integer",
+        "description": "Maximum number of sentences in summary"
+      }
+    }
+  },
+  "response_schema": {
+    "type": "object",
+    "properties": {
+      "summary": {
+        "type": "string",
+        "description": "The generated summary"
+      },
+      "original_length": {
+        "type": "integer",
+        "description": "Character count of original text"
+      }
+    }
+  }
+}

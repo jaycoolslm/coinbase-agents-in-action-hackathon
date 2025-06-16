@@ -1,0 +1,48 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "DirectoryEntry",
+  "description": "Schema for directory entry messages published to the Hedera Directory Topic",
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "string",
+      "minLength": 3,
+      "maxLength": 64,
+      "description": "Unique identifier within the directory (3-64 UTF-8 characters)"
+    },
+    "url": {
+      "type": "string",
+      "format": "uri",
+      "description": "Full endpoint URL"
+    },
+    "method": {
+      "type": "string",
+      "enum": ["GET", "POST", "PUT", "DELETE", "PATCH", "HEAD", "OPTIONS"],
+      "description": "Standard HTTP verb"
+    },
+    "description": {
+      "type": "string",
+      "maxLength": 256,
+      "description": "Human-readable summary (≤256 characters)"
+    },
+    "pointer_topic_id": {
+      "type": "string",
+      "pattern": "^0\\.0\\.[0-9]+$",
+      "description": "Hedera topic ID where pricing information lives (format: 0.0.xxxxx)"
+    },
+    "initial_price_usdc": {
+      "type": "number",
+      "minimum": 0.0000009,
+      "description": "Copy of the initial price (minimum ~0.000001 USDC)"
+    }
+  },
+  "required": [
+    "id",
+    "url",
+    "method",
+    "description",
+    "pointer_topic_id",
+    "initial_price_usdc"
+  ],
+  "additionalProperties": false
+}

@@ -1,0 +1,54 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "PointerMessage",
+  "description": "Schema for pointer messages published to private pointer topics for pricing updates",
+  "type": "object",
+  "properties": {
+    "price_usdc": {
+      "type": "number",
+      "minimum": 0.0000009,
+      "description": "Current charge per request (minimum ~0.000001 USDC)"
+    },
+    "version": {
+      "type": "integer",
+      "minimum": 1,
+      "description": "Version number, incremented on every update"
+    },
+    "request_schema": {
+      "type": "object",
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": ["object"],
+          "description": "Object type (always 'object' for JSON)"
+        },
+        "properties": {
+          "type": "object",
+          "description": "Properties definition"
+        }
+      },
+      "required": ["type", "properties"],
+      "additionalProperties": false,
+      "description": "Request body schema (JSON object schema for POST/PUT/PATCH endpoints)"
+    },
+    "response_schema": {
+      "type": "object",
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": ["object"],
+          "description": "Object type (always 'object' for JSON)"
+        },
+        "properties": {
+          "type": "object",
+          "description": "Properties definition"
+        }
+      },
+      "required": ["type", "properties"],
+      "additionalProperties": false,
+      "description": "Response schema definition (JSON object schema)"
+    }
+  },
+  "required": ["price_usdc", "version", "response_schema"],
+  "additionalProperties": false
+}

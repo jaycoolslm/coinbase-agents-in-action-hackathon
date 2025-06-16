@@ -1,0 +1,5 @@
+for mvp, keeping the pointer topic schema very simple so that json object is kept small
+
+assuming all fields are required
+
+future iterations could included optional fields, example req / res bodies etc

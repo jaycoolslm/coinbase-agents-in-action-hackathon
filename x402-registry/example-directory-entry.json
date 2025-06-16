@@ -1,0 +1,8 @@
+{
+  "id": "text-summarizer-api",
+  "url": "https://api.example.com/summarize",
+  "method": "POST",
+  "description": "AI-powered text summarization service that condenses long text into key points",
+  "pointer_topic_id": "0.0.000000",
+  "initial_price_usdc": 0.05
+}
