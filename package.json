@@ -1,0 +1,23 @@
+{
+  "name": "xarp",
+  "version": "1.0.0",
+  "description": "An open-source showcase of how an on-chain AI agent can:",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "setup": "cd x402/examples/typescript && pnpm install && pnpm build && cd ../../../agent && bun install && cd ../x402-registry && bun install",
+    "x402-server": "cd x402/examples/typescript/servers/express && pnpm dev",
+    "agent": "cd agent && bun run index.ts"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jaycoolslm/xARP.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/jaycoolslm/xARP/issues"
+  },
+  "homepage": "https://github.com/jaycoolslm/xARP#readme"
+}
