@@ -7,7 +7,7 @@ An open-source showcase of how an on-chain AI agent can:
 3. Pay in USDC via the x402 protocol
 4. Invoke the endpoint and relay the result back to the user
 
-The codebase is intentionally lean so you can fork it and start hacking in minutes.
+Check out the [demo](https://vimeo.com/1093992082/27cd96e5c6?share=copy).
 
 ## Repository at a Glance
 
@@ -25,41 +25,73 @@ The codebase is intentionally lean so you can fork it and start hacking in minut
 
 ## Quick Start (≈5 min)
 
-### 1. Clone Repo
+### 1. Clone Repo and Install Dependencies
 
 ```bash
 git clone https://github.com/jaycoolslm/xARP
 cd xARP
+npm run setup
 ```
 
-### 2. Launch an Example Pay-Walled API (optional)
+### 2. Setup x402 Registry
 
-```bash
-pnpm --filter x402/examples/typescript/servers/express dev
-# ➜ http://localhost:4021/weather   – costs $0.001
-```
+#### 2. a) Add .env variables
 
-### 3. Add the API to the On-Chain Registry (optional)
+Create Hedera Testnet Account at the [Hedera Portal](https://portal.hedera.com).
 
 ```bash
 cd x402-registry
-cp .env.example .env    # fill OPERATOR_ID, OPERATOR_KEY, DIRECTORY_TOPIC_ID
-bun run src/cli/registry.ts add-endpoint local-endpoints/weather-directory-entry.json
+cp .env.example .env
+# add your keys etc here
+```
+
+#### 2. b) Run CLI Commands
+
+```bash
+# create topic to act as the registry
+bun run src/cli/registry.ts create-directory
+# add output Registry Topic ID into .env
+
+# add an endpoint to the registry (this costs a fee)
+# this command adds an x402 server we will run later on
+bun run src/cli/registry.ts add-endpoint local-endpoints/summarise-directory-entry.json
+
+# add a price and req / res schema to the endpoint
+bun run src/cli/registry.ts update-price ${topic ID from recent command} ${USDC price} local-endpoints/summarise-pointer-message.json
+```
+
+Check the created Topic IDs on https://hashscan.io/testnet
+
+### 3. Launch an Example Pay-Walled API (optional)
+
+#### 3. a) Add .env variables
+
+Fill in .env vars from .env-local in `/x402/examples/typescript/servers/express`
+
+NOTE: an Amazon Bedrock account with claude-3.5-sonnet is needed to run the server, as there is a summarisation endpoint
+
+#### 3. b) Run server
+
+```bash
+# from root dir
+npm run x402-server
 ```
 
 ### 4. Talk to the Agent
 
-```bash
-cd agent
-cp .env.example .env    # fill OPENAI_API_KEY, CDP_API_KEY_ID, CDP_API_KEY_SECRET
-bun run index.ts
-```
+NOTE: You must add the DIRECTORY_TOPIC_ID from the previous step here
 
+````bash
+```sdbash
+cp .env.example .env    # fill OPENAI_API_KEY, CDP_API_KEY_ID, CDP_API_KEY_SECRET, DIRECTORY_TOPIC_ID
+bun run index.ts
+````
+
+``
 Try these prompts:
 
-- `list available APIs`
-- `get schema for weather-api`
-- `call GET /weather with city="London"`
+- `What endpoints are available?`
+- `Summarise this "hello my name is Jay, I live in England, and I love Web3`
 
 The agent will:
 
@@ -69,25 +101,13 @@ The agent will:
 
 ## Environment Variables
 
-| Component              | Required Vars                                                                         |
-| ---------------------- | ------------------------------------------------------------------------------------- |
-| Agent                  | `OPENAI_API_KEY`, `CDP_API_KEY_ID`, `CDP_API_KEY_SECRET`, `[NETWORK_ID=base-sepolia]` |
-| Hedera Registry CLI    | `OPERATOR_ID`, `OPERATOR_KEY`, `DIRECTORY_TOPIC_ID`, `[HEDERA_NETWORK=testnet]`       |
-| Example Express Server | `FACILITATOR_URL`, `ADDRESS`                                                          |
+| Component              | Required Vars                                                                                               |
+| ---------------------- | ----------------------------------------------------------------------------------------------------------- |
+| Agent                  | `OPENAI_API_KEY`, `CDP_API_KEY_ID`, `CDP_API_KEY_SECRET`, `DIRECTORY_TOPIC_ID`, `[NETWORK_ID=base-sepolia]` |
+| Hedera Registry CLI    | `OPERATOR_ID`, `OPERATOR_KEY`, `DIRECTORY_TOPIC_ID`, `[HEDERA_NETWORK=testnet]`                             |
+| Example Express Server | `FACILITATOR_URL`, `ADDRESS`                                                                                |
 
 See each directory's `.env.example` for exact formats.
-
-## Common Scripts
-
-```bash
-# From repo root
-pnpm build        # build all TypeScript packages
-pnpm test         # unit + integration tests
-
-# Registry helpers
-bun run x402-registry/src/cli/registry.ts add-endpoint docs/example-directory-entry.json
-bun run x402-registry/src/cli/registry.ts update-price 0.0.123456 0.02
-```
 
 ## Project Motivation
 
@@ -95,5 +115,3 @@ The architecture follows the PRDs in [`tasks/`](tasks/) which describe:
 
 - A Hedera-based API Registry MVP – lightweight two-topic design.
 - A Registry Query Action Provider – enabling in-chat API discovery for the agent.
-
-Happy hacking 🚀
